@@ -1,0 +1,24 @@
+<ul class='selections'>
+  {{#each selection in destination}}
+    <li class="selection">
+      <a class="as-close" {{action "removeSelection" selection}}>x</a>
+      {{yield}}
+      {{displayHelper controller.searchPath}}
+    </li>
+  {{/each}}
+  <li>{{view view.autosuggest value=query moveSelection='moveSelection' selectActive='selectActive' hideResults='hideResults' class='autosuggest'}}</li>
+</ul>
+<div {{bind-attr class=':results hasQuery::hdn'}}>
+  <ul class='suggestions'>
+    {{#each result in displayResults}}
+      <li {{action "addSelection" result}} {{bind-attr class=":result result.active"}}>
+        <span class="result-name">
+          {{yield}}
+          {{displayHelper controller.searchPath}}
+        </span>
+      </li>
+    {{else}}
+      <li class='no-results'>No Results.</li>
+    {{/each}}
+  </ul>
+</div>
