@@ -125,3 +125,41 @@ test("A selection can be removed", function(assert){
     assert.equal(get(controller, 'tags.length'), 0, "The controller has 0 tags after removeSelection.");
   });
 });
+
+test("key down and key up change the active elemnt", function(assert){
+  visit('/')
+  .fillIn('input.autosuggest', 'a')
+  .keyEvent('input.autosuggest', 'keydown', 40).then(function(){
+    var active = find('.results li.result.active');
+
+    assert.equal(1, active.length, "only one element is active");
+    assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted");
+  }).keyEvent('input.autosuggest', 'keydown', 40).then(function(){
+    var active = find('.results li.result.active');
+
+    assert.equal(1, active.length, "only one element is active");
+    assert.equal("Paul Cowan", active.text().trim(), "Correct result is highlighted");
+  }).keyEvent('input.autosuggest', 'keydown', 38).then(function(){
+    var active = find('.results li.result.active');
+
+    assert.equal(1, active.length, "only one element is active");
+    assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted");
+  });
+});
+
+test("pressing enter on a selected item adds the selection to the destination", function(assert){
+  visit('/')
+  .fillIn('input.autosuggest', 'Michael')
+  .keyEvent('input.autosuggest', 'keydown', 40).then(function(){
+    var active = find('.results li.result.active');
+
+    assert.equal(1, active.length, "only one element is active");
+    assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted");
+  }).keyEvent('input.autosuggest', 'keydown', 13).then(function(){
+    assert.equal(get(controller, 'tags.length'), 1, "1 selection has been added.");
+    var el = find('.selections li.selection');
+
+    assert.equal(el.length, 1, "1 selection element has been added");
+    assert.ok(/Michael Collins/.test(el.first().text()), "Correct text displayed in element.");
+  });
+});
