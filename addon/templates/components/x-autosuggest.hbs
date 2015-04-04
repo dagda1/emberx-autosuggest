@@ -6,7 +6,7 @@
       {{displayHelper selection searchPath}}
     </li>
   {{/each}}
-  <li>{{view view.autosuggest value=query moveSelection='moveSelection' selectActive='selectActive' hideResults='hideResults' class='autosuggest'}}</li>
+  <li>{{input type="text" value=query focus-out="removeFocus" class="autosuggest"}}</li>
 </ul>
 <div {{bind-attr class=':results hasQuery::hdn'}}>
   <ul class='suggestions'>

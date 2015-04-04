@@ -26,89 +26,14 @@ export default Ember.Component.extend({
       this.$('input[type=text]').focus();
     },
 
-    moveSelection: function(direction){
-      var selectionIndex = get(this, 'selectionIndex'),
-          isUp = direction === 'up',
-          isDown = !isUp,
-          displayResults = get(this, 'displayResults'),
-          displayResultsLength = get(displayResults, 'length'),
-          searchPath = get(this, 'searchPath'),
-          hoverEl;
-
-      displayResults.setEach('active', false);
-
-      if(!displayResultsLength){
-        set(this, 'selectionIndex', -1);
-        return;
-      }
-
-      hoverEl = this.$('li.result.hover');
-
-      if(hoverEl.length){
-        var text = Ember.$('span', hoverEl).text(),
-            selected = displayResults.find(function(item){
-              return get(item, searchPath) === text;
-            });
-
-        selectionIndex = displayResults.indexOf(selected);
-
-        this.$('ul.suggestions li').removeClass('hover');
-
-        this.$('input.autosuggest').focus();
-      }
-
-      if(isUp && selectionIndex <= 0){
-        selectionIndex =  0;
-      }
-      else if(isDown && selectionIndex === displayResultsLength -1){
-        selectionIndex = displayResultsLength -1;
-      }else if(isDown){
-        selectionIndex++;
-      }else{
-        selectionIndex--;
-      }
-
-      var active = get(this, 'displayResults').objectAt(selectionIndex);
-
-      set(this, 'selectionIndex', selectionIndex);
-
-      set(active, 'active', true);
-    },
-
-    hideResults: function(){
-      var displayResults = get(this, 'displayResults');
-
-      set(this, 'selectionIndex', -1);
-
-      if(!get(displayResults, 'length')){
-        this.$('.no-results').addClass('hdn');
-      }
-
-      this.$('.results').addClass('hdn');
-    },
-
-    selectActive: function(){
-      var displayResultsLength = get(this, 'displayResults.length');
-
-      if(!displayResultsLength){
-        return;
-      }
-
-      var active = get(this, 'displayResults').find(function(item){
-        return get(item, 'active');
-      });
-
-      if(!active){
-        this.send('hideResults');
-        return;
-      }
-
-      this.send('addSelection', active);
-    },
-
     removeSelection: function(item){
       get(this, 'destination').removeObject(item);
     },
+
+    removeFocus: function() {
+      console.log('removeFocus');
+      setTimeout(this.hideResults, 200);
+    }
   },
 
   classNameBindings: [':autosuggest'],
@@ -171,12 +96,11 @@ export default Ember.Component.extend({
 
     this._queryPromise(query).then(function(results){
       self.processResults(query, results);
-    },
-                                   function(e){
-                                     console.log(e.message);
-                                     console.log(e.stack);
-                                     throw e;
-                                   });
+    }, function(e){
+      console.log(e.message);
+      console.log(e.stack);
+      throw e;
+    });
   },
 
   processResults: function(query, source){
@@ -202,8 +126,6 @@ export default Ember.Component.extend({
     displayResults.pushObjects(Ember.A(results.sort(function(a, b){
       return Ember.compare(get(a, searchPath), get(b, searchPath));
     })));
-
-    console.log(displayResults.mapProperty('name'));
   },
 
   hasQuery: Ember.computed(function(){
@@ -265,35 +187,110 @@ export default Ember.Component.extend({
     suggestions.css('width', width);
   },
 
-  autosuggest: Ember.TextField.extend({
-    keyDown: function(e){
-      var keyCode = e.keyCode;
+  moveSelection: function(direction){
+    var selectionIndex = get(this, 'selectionIndex'),
+        isUp = direction === 'up',
+        isDown = !isUp,
+        displayResults = get(this, 'displayResults'),
+        displayResultsLength = get(displayResults, 'length'),
+        searchPath = get(this, 'searchPath'),
+        hoverEl;
 
-      if(!ALLOWED_KEY_CODES.contains(keyCode)){
-        return;
-      }
+    displayResults.setEach('active', false);
 
-      var controller = get(this, 'controller');
-
-      switch(keyCode){
-      case KEY_UP:
-        this.sendAction('moveSelection', 'up');
-        break;
-      case KEY_DOWN:
-        this.sendAction('moveSelection', 'down');
-        break;
-      case ENTER:
-        controller.sendAction('selectActive');
-        break;
-      case ESCAPE:
-        this.sendAction('hideResults');
-        break;
-      }
-    },
-
-    focusOut: function() {
-      var self = this;
-      setTimeout( function(){ self.sendAction('hideResults'); } , 200 );
+    if(!displayResultsLength){
+      set(this, 'selectionIndex', -1);
+      return;
     }
-  })
+
+    hoverEl = this.$('li.result.hover');
+
+    if(hoverEl.length){
+      var text = Ember.$('span', hoverEl).text(),
+          selected = displayResults.find(function(item){
+            return get(item, searchPath) === text;
+          });
+
+      selectionIndex = displayResults.indexOf(selected);
+
+      this.$('ul.suggestions li').removeClass('hover');
+
+      this.$('input.autosuggest').focus();
+    }
+
+    if(isUp && selectionIndex <= 0){
+      selectionIndex =  0;
+    }
+    else if(isDown && selectionIndex === displayResultsLength -1){
+      selectionIndex = displayResultsLength -1;
+    }else if(isDown){
+      selectionIndex++;
+    }else{
+      selectionIndex--;
+    }
+
+    var active = get(this, 'displayResults').objectAt(selectionIndex);
+
+    set(this, 'selectionIndex', selectionIndex);
+
+    set(active, 'active', true);
+  },
+
+  hideResults: function(){
+    var displayResults = get(this, 'displayResults');
+
+    set(this, 'selectionIndex', -1);
+
+    if(!get(displayResults, 'length')){
+      this.$('.no-results').addClass('hdn');
+    }
+
+    this.$('.results').addClass('hdn');
+  },
+
+  selectActive: function(){
+    var displayResultsLength = get(this, 'displayResults.length');
+
+    if(!displayResultsLength){
+      return;
+    }
+
+    var active = get(this, 'displayResults').find(function(item){
+      return get(item, 'active');
+    });
+
+    if(!active){
+      this.hideResults();
+      return;
+    }
+
+    this.send('addSelection', active);
+  },
+
+  keyDown: function(e){
+    var keyCode = e.keyCode;
+
+    if(!ALLOWED_KEY_CODES.contains(keyCode)){
+      return;
+    }
+
+    switch(keyCode){
+    case KEY_UP:
+      this.moveSelection('up');
+      break;
+    case KEY_DOWN:
+      this.moveSelection('down');
+      break;
+    case ENTER:
+      this.selectActive();
+      break;
+    case ESCAPE:
+      this.hideResults();
+      break;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  },
 });

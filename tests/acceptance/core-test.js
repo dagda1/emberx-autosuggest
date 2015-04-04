@@ -129,12 +129,12 @@ test("A selection can be removed", function(assert){
 test("key down and key up change the active elemnt", function(assert){
   visit('/')
   .fillIn('input.autosuggest', 'a')
-  .keyEvent('input.autosuggest', 'keydown', 40).then(function(){
+  .keyEvent('.autosuggest', 'keydown', 40).then(function(){
     var active = find('.results li.result.active');
 
     assert.equal(1, active.length, "only one element is active");
     assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted");
-  }).keyEvent('input.autosuggest', 'keydown', 40).then(function(){
+  }).keyEvent('.autosuggest', 'keydown', 40).then(function(){
     var active = find('.results li.result.active');
 
     assert.equal(1, active.length, "only one element is active");
