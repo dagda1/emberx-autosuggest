@@ -17,6 +17,10 @@ module('XAutosuggest - Choose and Select from simple array', {
   },
 
   afterEach: function() {
+    Ember.run(function() {
+      get(controller, 'tags').clear();
+    });
+
     Ember.run(application, 'destroy');
   }
 });
@@ -94,5 +98,30 @@ test("A selection can be added", function(assert) {
     var noResults = find('.suggestions .no-results');
 
     assert.equal(noResults.is(':visible'), false, "No results message is not displayed.");
+  });
+});
+
+test("A selection can be removed", function(assert){
+  assert.expect(5);
+
+  visit('/');
+
+  fillIn('input.autosuggest', 'Paul')
+  .click('.results .suggestions li.result');
+
+  andThen(function(){
+    var el = find('.selections li.selection');
+
+    assert.equal(3, get(controller, 'model.length'), "precon - the controller has 3 elements.");
+
+    assert.equal(el.length, 1, "precon - 1 selection element has been added");
+    var close = find('.as-close');
+
+    assert.equal(close.length, 1, "precon - only one close link is on the page");
+  }).click('.as-close').then(function(){
+    var el = find('.selections li.selection');
+
+    assert.equal(el.length, 0, "precon - there are now no suggestions after removeSelection.");
+    assert.equal(get(controller, 'tags.length'), 0, "The controller has 0 tags after removeSelection.");
   });
 });

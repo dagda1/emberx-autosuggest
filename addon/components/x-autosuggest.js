@@ -2,6 +2,15 @@ import Ember from 'ember';
 import layout from '../templates/components/x-autosuggest';
 import displayHelper from '../helpers/display-helper';
 
+const KEY_DOWN = 40;
+const KEY_UP = 38;
+const COMMA = 188;
+const TAB = 9;
+const ENTER = 13;
+const ESCAPE = 27;
+
+const ALLOWED_KEY_CODES = Ember.A([KEY_UP, KEY_DOWN, COMMA, TAB, ENTER, ESCAPE]);
+
 var get = Ember.get,
     set = Ember.set,
     addObserver = Ember.addObserver;
@@ -193,6 +202,8 @@ export default Ember.Component.extend({
     displayResults.pushObjects(Ember.A(results.sort(function(a, b){
       return Ember.compare(get(a, searchPath), get(b, searchPath));
     })));
+
+    console.log(displayResults.mapProperty('name'));
   },
 
   hasQuery: Ember.computed(function(){
@@ -255,40 +266,26 @@ export default Ember.Component.extend({
   },
 
   autosuggest: Ember.TextField.extend({
-    KEY_DOWN: 40,
-    KEY_UP: 38,
-    COMMA: 188,
-    TAB: 9,
-    ENTER: 13,
-    ESCAPE: 27,
-
-    init: function(){
-      this._super.apply(this, arguments);
-
-      var allowedKeyCodes = Ember.A([this.KEY_UP, this.KEY_DOWN, this.COMMA, this.TAB, this.ENTER, this.ESCAPE]);
-      this.set('allowedKeyCodes', allowedKeyCodes);
-    },
-
     keyDown: function(e){
       var keyCode = e.keyCode;
 
-      if(!this.get('allowedKeyCodes').contains(keyCode)){
+      if(!ALLOWED_KEY_CODES.contains(keyCode)){
         return;
       }
 
       var controller = get(this, 'controller');
 
       switch(keyCode){
-      case this.KEY_UP:
+      case KEY_UP:
         this.sendAction('moveSelection', 'up');
         break;
-      case this.KEY_DOWN:
+      case KEY_DOWN:
         this.sendAction('moveSelection', 'down');
         break;
-      case this.ENTER:
+      case ENTER:
         controller.sendAction('selectActive');
         break;
-      case this.ESCAPE:
+      case ESCAPE:
         this.sendAction('hideResults');
         break;
       }
@@ -298,25 +295,5 @@ export default Ember.Component.extend({
       var self = this;
       setTimeout( function(){ self.sendAction('hideResults'); } , 200 );
     }
-  }),
-
-  _yield: function(context, options) {
-    var get = Ember.get,
-        view = options.data.view,
-        parentView = this._parentView,
-        template = get(this, 'template');
-
-    if (template) {
-      Ember.assert("A Component must have a parent view in order to yield.", parentView);
-      view.appendChild(Ember.View, {
-        isVirtual: true,
-        tagName: '',
-        _contextView: parentView,
-        template: template,
-        context: get(view, 'context'), // the default is get(parentView, 'context'),
-        controller: get(view, 'controller'), // the default is get(parentView, 'context'),
-        templateData: { keywords: parentView.cloneKeywords() }
-      });
-    }
-  }
+  })
 });

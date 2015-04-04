@@ -1,5 +1,7 @@
 import Ember from 'ember';
 
+var get = Ember.get;
+
 export default Ember.Route.extend({
   model: function() {
     return Ember.A([
@@ -7,5 +9,9 @@ export default Ember.Route.extend({
       Ember.Object.create({id: 2, name: "Michael Collins"}),
       Ember.Object.create({id: 3, name: "Paul Cowan"})
     ]);
+  },
+
+  deactivate: function() {
+    get(this.controller, 'model').clear();
   }
 });
