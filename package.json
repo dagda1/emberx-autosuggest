@@ -1,7 +1,7 @@
 {
   "name": "emberx-autosuggest",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "Tag picker functionality",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,7 +11,7 @@
     "build": "ember build",
     "test": "ember test"
   },
-  "repository": "",
+  "repository": "https://github.com/dagda1/emberx-autosuggest.git",
   "engines": {
     "node": ">= 0.10.0"
   },

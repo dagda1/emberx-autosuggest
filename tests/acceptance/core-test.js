@@ -34,7 +34,6 @@ test('x-autosuggest DOM elements are setup', function(assert) {
   });
 });
 
-
 test("a no results message is displayed when no match is found", function(assert){
   assert.expect(3);
 
@@ -69,4 +68,31 @@ test("Search results should be filtered", function(assert){
   });
 });
 
+test("A selection can be added", function(assert) {
+  assert.expect(6);
 
+  assert.equal(get(controller, 'tags.length'), 0, "precon - no selections have been added.");
+
+  visit('/');
+
+  fillIn('input.autosuggest', 'Paul');
+
+  click('.results .suggestions li.result');
+
+  andThen(function(){
+    assert.equal(get(controller, 'tags.length'), 1, "1 selection has been added.");
+
+    var el = find('.selections li.selection');
+    assert.equal(el.length, 1, "1 selection element has been added");
+
+    assert.ok(/Paul Cowan/.test(el.first().text()), "Correct text displayed in element.");
+
+    var suggestions = find('.results .suggestions li.result');
+
+    assert.equal(suggestions.length, 0, "No suggestions are visible.");
+
+    var noResults = find('.suggestions .no-results');
+
+    assert.equal(noResults.is(':visible'), false, "No results message is not displayed.");
+  });
+});
