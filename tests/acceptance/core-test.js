@@ -5,11 +5,15 @@ import {
 } from 'qunit';
 import startApp from '../helpers/start-app';
 
-var application;
+var application,
+    get = Ember.get,
+    controller;
 
 module('XAutosuggest - Choose and Select from simple array', {
   beforeEach: function() {
     application = startApp();
+    // FIXME: find a better way of getting to the container
+    controller = application.__container__.lookup('controller:core');
   },
 
   afterEach: function() {
@@ -45,4 +49,24 @@ test("a no results message is displayed when no match is found", function(assert
     assert.equal(find('.results .suggestions .no-results').html(), "No Results.", "No results message is displayed.");
   });
 });
+
+
+test("Search results should be filtered", function(assert){
+  assert.expect(4);
+
+  visit('/').then(function(){
+    assert.equal(get(controller, 'content.length'), 3, "precon - 3 possible selections exist");
+
+    assert.equal($('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
+  });
+
+  fillIn('input.autosuggest', 'Paul');
+
+  andThen(function(){
+    var el = find('.results .suggestions li.result span');
+    assert.equal(el.length, 1, "1 search result exists");
+    assert.equal(el.text().trim(), "Paul Cowan", "1 search result is visible.");
+  });
+});
+
 

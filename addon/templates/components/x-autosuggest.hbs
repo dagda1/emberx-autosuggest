@@ -3,7 +3,7 @@
     <li class="selection">
       <a class="as-close" {{action "removeSelection" selection}}>x</a>
       {{yield}}
-      {{displayHelper controller.searchPath}}
+      {{displayHelper selection searchPath}}
     </li>
   {{/each}}
   <li>{{view view.autosuggest value=query moveSelection='moveSelection' selectActive='selectActive' hideResults='hideResults' class='autosuggest'}}</li>
@@ -14,7 +14,7 @@
       <li {{action "addSelection" result}} {{bind-attr class=":result result.active"}}>
         <span class="result-name">
           {{yield}}
-          {{displayHelper controller.searchPath}}
+          {{displayHelper result searchPath}}
         </span>
       </li>
     {{else}}

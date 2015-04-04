@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from '../templates/components/x-autosuggest';
-
+import displayHelper from '../helpers/display-helper';
 
 var get = Ember.get,
     set = Ember.set,
@@ -109,6 +109,8 @@ export default Ember.Component.extend({
   selectionIndex: -1,
 
   init: function(){
+    // FIXME: when we worked out what is going on
+    console.log(displayHelper);
     this._super.apply(this, arguments);
     addObserver(this, 'query', this.queryDidChange);
     set(this, 'displayResults', Ember.A());
@@ -289,8 +291,6 @@ export default Ember.Component.extend({
       case this.ESCAPE:
         this.sendAction('hideResults');
         break;
-      default:
-        console.log(keyCode);
       }
     },
 
