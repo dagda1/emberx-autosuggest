@@ -42,22 +42,30 @@ export default Ember.Component.extend({
   query: null,
   selectionIndex: -1,
 
-  init: function(){
+  _autoSuggestInitialize: Ember.on('init', function() {
     // FIXME: when we worked out what is going on
     console.log(displayHelper);
     this._super.apply(this, arguments);
     addObserver(this, 'query', this.queryDidChange);
     set(this, 'displayResults', Ember.A());
-  },
+  }),
 
-  didInsertElement: function(){
+  _autoSuggestSetup: Ember.on('didInsertElement', function() {
     this._super.apply(this, arguments);
+
     Ember.assert('You must supply a source for the autosuggest component', get(this, 'source'));
     Ember.assert('You must supply a destination for the autosuggest component', get(this, 'destination'));
 
     this.$('ul.suggestions').on('mouseover', 'li', this.mouseOver.bind(this));
     this.$('ul.suggestions').on('mouseout', 'li', this.mouseOut.bind(this));
-  },
+  }),
+
+  _autoSuggestTeardown: Ember.on('willDestroyElement', function() {
+    this.removeObserver('query', this, this.queryDidChange);
+
+    this.$('ul.suggestions').off('mouseover');
+    this.$('ul.suggestions').off('mouseout');
+  }),
 
   _queryPromise: function(query){
     var source = get(this, 'source'),
@@ -128,7 +136,7 @@ export default Ember.Component.extend({
     })));
   },
 
-  hasQuery: Ember.computed(function(){
+  hasQuery: Ember.computed('query', function(){
     var query = get(this, 'query');
 
     if(query && query.length > get(this, 'minChars')){
@@ -137,7 +145,7 @@ export default Ember.Component.extend({
     }
 
     return false;
-  }).property('query'),
+  }),
 
   mouseOver: function(evt){
     var el = this.$(evt.target);
