@@ -275,6 +275,17 @@ export default Ember.Component.extend({
     this.send('addSelection', active);
   },
 
+  keyFunctionMap: Ember.computed(function() {
+    var keyFunctionMap = {};
+
+    keyFunctionMap[KEY_UP] = this.moveSelection.bind(this, "up");
+    keyFunctionMap[KEY_DOWN] = this.moveSelection.bind(this, "down");
+    keyFunctionMap[ENTER] = this.selectActive;
+    keyFunctionMap[ESCAPE] = this.hideResults;
+
+    return keyFunctionMap;
+  }),
+
   keyDown: function(e){
     var keyCode = e.keyCode;
 
@@ -282,20 +293,7 @@ export default Ember.Component.extend({
       return;
     }
 
-    switch(keyCode){
-    case KEY_UP:
-      this.moveSelection('up');
-      break;
-    case KEY_DOWN:
-      this.moveSelection('down');
-      break;
-    case ENTER:
-      this.selectActive();
-      break;
-    case ESCAPE:
-      this.hideResults();
-      break;
-    }
+    get(this, 'keyFunctionMap')[keyCode].call(this);
 
     e.preventDefault();
     e.stopPropagation();
