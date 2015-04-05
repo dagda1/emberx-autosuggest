@@ -133,17 +133,17 @@ test("key down and key up change the active elemnt", function(assert){
     var active = find('.results li.result.active');
 
     assert.equal(1, active.length, "only one element is active");
-    assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted");
+    assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted at first keyDown event and down key is pressed");
   }).keyEvent('.autosuggest', 'keydown', 40).then(function(){
     var active = find('.results li.result.active');
 
     assert.equal(1, active.length, "only one element is active");
-    assert.equal("Paul Cowan", active.text().trim(), "Correct result is highlighted");
-  }).keyEvent('input.autosuggest', 'keydown', 38).then(function(){
+    assert.equal("Paul Cowan", active.text().trim(), "Correct result is highlighted after second keyDown event and down key is pressed.");
+  }).keyEvent('.autosuggest', 'keydown', 38).then(function(){
     var active = find('.results li.result.active');
 
     assert.equal(1, active.length, "only one element is active");
-    assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted");
+    assert.equal("Michael Collins", active.text().trim(), "Correct result is highlighted after third keydown and key up is pressed.");
   });
 });
 
