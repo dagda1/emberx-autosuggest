@@ -1,8 +1,8 @@
 <ul class='selections'>
-  {{#each selection in destination}}
+  {{#each destination as |selection|}}
     <li class="selection">
       <a class="as-close" {{action "removeSelection" selection}}>x</a>
-      {{yield}}
+      {{yield selection}}
       {{display-helper selection searchPath}}
     </li>
   {{/each}}
@@ -10,10 +10,10 @@
 </ul>
 <div {{bind-attr class=':results hasQuery::hdn'}}>
   <ul class='suggestions'>
-    {{#each result in displayResults}}
+    {{#each displayResults as |result|}}
       <li {{action "addSelection" result}} {{bind-attr class=":result result.active"}}>
         <span class="result-name">
-          {{yield}}
+          {{yield result}}
           {{display-helper result searchPath}}
         </span>
       </li>

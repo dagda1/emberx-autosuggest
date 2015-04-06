@@ -1,0 +1,5 @@
+<p>
+  {{#x-autosuggest source=model destination=tags minChars=0 as |selection|}}
+    <img src="img/small_avatar.png" alt="{{selection.name}}" class="avatar"/>
+  {{/x-autosuggest}}
+</p>
