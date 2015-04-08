@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from '../templates/components/x-autosuggest';
-import displayHelper from '../helpers/display-helper';
+// import displayHelper from '../helpers/display-helper';
 
 const KEY_DOWN = 40;
 const KEY_UP = 38;
@@ -44,7 +44,7 @@ export default Ember.Component.extend({
 
   _autoSuggestInitialize: Ember.on('init', function() {
     // FIXME: when we worked out what is going on
-    console.log(displayHelper);
+    // console.log(displayHelper);
     this._super.apply(this, arguments);
     addObserver(this, 'query', this.queryDidChange);
     set(this, 'displayResults', Ember.A());
