@@ -3,7 +3,7 @@
     <li class="selection">
       <a class="as-close" {{action "removeSelection" selection}}>x</a>
       {{yield}}
-      {{displayHelper selection searchPath}}
+      {{display-helper selection searchPath}}
     </li>
   {{/each}}
   <li>{{input type="text" value=query focus-out="removeFocus" class="autosuggest"}}</li>
