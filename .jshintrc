@@ -4,7 +4,8 @@
     "window",
     "-Promise",
     "$",
-    "DS"
+    "DS",
+    "module"
   ],
   "browser": true,
   "boss": true,
