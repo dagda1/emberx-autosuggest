@@ -30,13 +30,11 @@ while hitting escape hides the autocomplete menu.
 
 ### Customise Suggestions and Results
 - You can prepend content to the suggestions and the results by using the component in its block form:
-<pre>
 ```
-    {{#auto-suggest source=controller.employees destination=tags searchPath="fullName" minChars=0}}
-      <img src="img/small_avatar.png" {{bindAttr alt="fullName"}}/>
+    {{#auto-suggest source=controller.employees destination=tags searchPath="fullName" minChars=0 as |selection|}}
+      <img src="img/small_avatar.png" alt="{{selection.name}}" class="avatar"/>
     {{/auto-suggest}}
 ```
-</pre>
 
 - The above declaration will result in the following markup:
 
