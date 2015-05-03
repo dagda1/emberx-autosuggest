@@ -11,8 +11,7 @@ const ESCAPE = 27;
 const ALLOWED_KEY_CODES = Ember.A([KEY_UP, KEY_DOWN, COMMA, TAB, ENTER, ESCAPE]);
 
 var get = Ember.get,
-    set = Ember.set,
-    addObserver = Ember.addObserver;
+    set = Ember.set;
 
 export default Ember.Component.extend({
   layout: layout,
@@ -43,7 +42,6 @@ export default Ember.Component.extend({
 
   _autoSuggestInitialize: Ember.on('init', function() {
     this._super.apply(this, arguments);
-    addObserver(this, 'query', this.queryDidChange);
     set(this, 'displayResults', Ember.A());
   }),
 
@@ -60,8 +58,6 @@ export default Ember.Component.extend({
   }),
 
   _autoSuggestTeardown: Ember.on('willDestroyElement', function() {
-    this.removeObserver('query', this, this.queryDidChange);
-
     var suggestions = document.querySelector("ul.suggestions");
 
     suggestions.removeEventListener("mouseover", this.mouseOver);
@@ -91,13 +87,27 @@ export default Ember.Component.extend({
     });
   },
 
-  queryDidChange: function(){
-    var query = get(this, 'query'),
+  hasQuery: Ember.computed('query', function(){
+    var query = get(this, 'query');
+
+    if(query && query.length > get(this, 'minChars')){
+      this.positionResults();
+      return true;
+    }
+
+    return false;
+  }),
+
+  input: function(e) {
+    console.log(e.target);
+    var query = e.target.value || '',
         displayResults = get(this, 'displayResults'),
-        hasQuery = get(this, 'hasQuery'),
+        minChars = get(this, 'minChars'),
         self = this;
 
-    if(!hasQuery){
+    set(this, 'query', query);
+
+    if(!query.length || query < minChars) {
       set(this, 'selectionIndex', -1);
       displayResults.clear();
       return;
@@ -136,17 +146,6 @@ export default Ember.Component.extend({
       return Ember.compare(get(a, searchPath), get(b, searchPath));
     })));
   },
-
-  hasQuery: Ember.computed('query', function(){
-    var query = get(this, 'query');
-
-    if(query && query.length > get(this, 'minChars')){
-      this.positionResults();
-      return true;
-    }
-
-    return false;
-  }),
 
   mouseOver: function(evt){
     var el = this.$(evt.target);

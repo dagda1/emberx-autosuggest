@@ -11,6 +11,7 @@
     "visit",
     "exists",
     "fillIn",
+    "fillInWithTriggerEvents",
     "click",
     "keyEvent",
     "triggerEvent",
@@ -21,7 +22,8 @@
     "andThen",
     "currentURL",
     "currentPath",
-    "currentRouteName"
+    "currentRouteName",
+    "fillInAndInput"
   ],
   "node": false,
   "browser": false,
