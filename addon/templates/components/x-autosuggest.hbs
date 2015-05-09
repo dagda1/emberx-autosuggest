@@ -8,7 +8,6 @@
   {{/each}}
   <li>
     <input type="text" {{action "removeFocus" on="focus-out"}} class="autosuggest"/>
-    {{!input type="text" value=query focus-out="removeFocus" class="autosuggest"}}
   </li>
 </ul>
 <div {{bind-attr class=':results hasQuery::hdn'}}>

@@ -11,7 +11,7 @@
     "visit",
     "exists",
     "fillIn",
-    "fillInWithTriggerEvents",
+    "fillInWithInputEvents",
     "click",
     "keyEvent",
     "triggerEvent",

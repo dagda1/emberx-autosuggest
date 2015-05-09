@@ -31,13 +31,13 @@ test("Can prepend a customisation in each suggestion", function(assert){
 
     assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   })
-  .fillIn('input.autosuggest', 'Paul').then(function(){
-    var el = find('.results .suggestions li.result span');
-    assert.equal(el.length, 1, "1 search result exists");
+    .fillInWithInputEvents('input.autosuggest', 'Paul',['keydown', 'input']  ).then(function(){
+      var el = find('.results .suggestions li.result span');
+      assert.equal(el.length, 1, "1 search result exists");
 
-    var img = el.find('img.avatar');
-    assert.equal('Paul Cowan', img.attr('alt'));
-  });
+      var img = el.find('img.avatar');
+      assert.equal('Paul Cowan', img.attr('alt'));
+    });
 });
 
 test("Can prepend a customisation to each chosen selection", function(assert){
@@ -46,13 +46,13 @@ test("Can prepend a customisation to each chosen selection", function(assert){
 
     assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   })
-  .fillIn('input.autosuggest', 'Paul')
-  .click('.results .suggestions li.result').then(function(){
-    var el = find('.selections li.selection');
+    .fillInWithInputEvents('input.autosuggest', 'Paul', ['keydown', 'input'])
+    .click('.results .suggestions li.result').then(function(){
+      var el = find('.selections li.selection');
 
-    assert.equal(el.length, 1, "1 selection element has been added");
-    var img = el.find('img.avatar');
-    assert.equal('Paul Cowan', img.attr('alt'));
-  });
+      assert.equal(el.length, 1, "1 selection element has been added");
+      var img = el.find('img.avatar');
+      assert.equal('Paul Cowan', img.attr('alt'));
+    });
 });
 

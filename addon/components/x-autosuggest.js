@@ -99,7 +99,6 @@ export default Ember.Component.extend({
   }),
 
   input: function(e) {
-    console.log(e.target);
     var query = e.target.value || '',
         displayResults = get(this, 'displayResults'),
         minChars = get(this, 'minChars'),
@@ -116,8 +115,7 @@ export default Ember.Component.extend({
     this._queryPromise(query).then(function(results){
       self.processResults(query, results);
     }, function(e){
-      console.log(e.message);
-      console.log(e.stack);
+      Ember.Looger.log(e);
       throw e;
     });
   },
