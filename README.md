@@ -4,7 +4,7 @@ ember-xautosuggest
 
 ![ember autosuggest](autosuggest.png)
 
-This component will auto-complete or auto-suggest completed search queries for you as you type.
+This component will auto-complete or autosuggest completed search queries for you as you type.
 
 There is keyboard navigation using the up and down keys to scroll up and down the results and enter adds the selection,
 while hitting escape hides the autocomplete menu.
@@ -31,9 +31,9 @@ while hitting escape hides the autocomplete menu.
 ### Customise Suggestions and Results
 - You can prepend content to the suggestions and the results by using the component in its block form:
 ```
-    {{#auto-suggest source=controller.employees destination=tags searchPath="fullName" minChars=0 as |selection|}}
+    {{#x-autosuggest source=controller.employees destination=tags searchPath="fullName" minChars=0 as |selection|}}
       <img src="img/small_avatar.png" alt="{{selection.name}}" class="avatar"/>
-    {{/auto-suggest}}
+    {{/x-autosuggest}}
 ```
 
 - The above declaration will result in the following markup:

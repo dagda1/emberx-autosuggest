@@ -21,7 +21,8 @@ export default Ember.Component.extend({
       set(this, 'query', '');
       get(this, 'destination').addObject(selection);
       set(this, 'selectionIndex', -1);
-      this.$('input[type=text]').focus();
+      set(this, 'query', '');
+      this.$('input[type=text]').val('').focus();
     },
 
     removeSelection: function(item){
@@ -152,7 +153,7 @@ export default Ember.Component.extend({
       return get(item, 'active');
     });
 
-    if(active || active.length){
+    if(active && active.length){
       active.setEach('active', false);
       set(this, 'selectionIndex', -1);
     }

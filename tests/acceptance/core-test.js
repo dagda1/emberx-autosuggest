@@ -72,7 +72,7 @@ test("Search results should be filtered", function(assert){
 });
 
 test("A selection can be added", function(assert) {
-  assert.expect(6);
+  assert.expect(7);
 
   assert.equal(get(controller, 'tags.length'), 0, "precon - no selections have been added.");
 
@@ -97,6 +97,9 @@ test("A selection can be added", function(assert) {
     var noResults = find('.suggestions .no-results');
 
     assert.equal(noResults.is(':visible'), false, "No results message is not displayed.");
+
+    var input = find('input[type=text]');
+    assert.ok(!input.val());
   });
 });
 
