@@ -1,4 +1,6 @@
 import Ember from 'ember';
+import DS from 'ember-data';
+import FixtureAdapter from '../../adapters/application';
 import Application from '../../app';
 import Router from '../../router';
 import config from '../../config/environment';
@@ -11,6 +13,7 @@ export default function startApp(attrs) {
 
   Ember.run(function() {
     application = Application.create(attributes);
+    application.register('adapter:application', FixtureAdapter);
     application.setupForTesting();
     application.injectTestHelpers();
   });
