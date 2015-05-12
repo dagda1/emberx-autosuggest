@@ -40,6 +40,34 @@ while hitting escape hides the autocomplete menu.
 
 ![ember autosuggest](custom.png)
 
+### Query an Ember-Data model
+Generate ember-data type ```findQuery``` queries on the remote server by getting a reference to the type.
+```
+// controller
+import Employee from '../models/employee';
+
+export default Ember.Controller.extend({
+  chosenEmployees: Ember.A(),
+  Employee: Employee
+});
+
+```
+Then setting the type as the source of the ```x-autosuggest``` component.
+```
+{{x-autosuggest source=Employee destination=chosenEmployees searchPath="fullName" minChars=0}}
+```
+This will call findQuery with an expression created from the **searchPath**.  In the above example, that would be:
+```
+store.find(Employee, {fullName: '<query>'});
+```
+### View the demo
+```
+cd tests/dummy
+ember server
+open a browser at http://localhost:4200/
+
+```
+
 ## Building yourself ##
 
 ```bash

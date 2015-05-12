@@ -68,17 +68,17 @@ export default Ember.Component.extend({
   _queryPromise: function(query){
     var source = get(this, 'source'),
         searchPath = get(this, 'searchPath'),
-        store = get(this, 'store');
+        store = this.container.lookup('store:main');
 
     return new Ember.RSVP.Promise(function(resolve, reject){
       if(('undefined' !== typeof DS) && (DS.Model.detect(source))){
+        Ember.assert('You have specifid the source as a DS.Model but no store is in the container', store);
+
         var queryExpression = {};
 
         queryExpression[searchPath] = query;
 
-        var type = source.toString().humanize();
-
-        return store.find(type, queryExpression).then(resolve, reject);
+        return store.find(source, queryExpression).then(resolve, reject);
       }
       else if(source.then){
         source.then(resolve, reject);
@@ -115,9 +115,8 @@ export default Ember.Component.extend({
 
     this._queryPromise(query).then(function(results){
       self.processResults(query, results);
-    }, function(e){
-      Ember.Looger.log(e);
-      throw e;
+    }).catch(function(error) {
+      Ember.Logger.error(error);
     });
   },
 
