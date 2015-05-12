@@ -175,21 +175,7 @@ export default Ember.Component.extend({
   },
 
   positionResults: function(){
-    var results = this.$('.results');
-
-    var suggestions = this.$('ul.suggestions'),
-        el = this.$(),
-        position = el.position();
-
-    results.removeClass('hdn');
-
-    suggestions.css('position', 'absolute');
-    suggestions.css('left', position.left);
-    suggestions.css('top', position.top + this.$().height());
-
-    var width = el.outerWidth();
-
-    suggestions.css('width', width);
+    this.$('.results').removeClass('hdn');
   },
 
   moveSelection: function(direction){

@@ -4,17 +4,22 @@
 
 ul.selections, ul.suggestions{ list-style-type: none;}
 
+.results {
+  position: relative;
+}
+
 ul.suggestions{
-	border: 1px solid #888;
-	position: absolute;
-	margin: 2px 0 0 0;
-	padding: 0;
-	font-size: 14px;
-	color: #000;
-	font-family: "Lucida Grande", arial, sans-serif;
-	background-color: #fff;
-	background-color: rgba(255,255,255,0.95);
-	z-index: 2;
+  width: 100%;
+  border: 1px solid #888;
+  position: absolute;
+  margin: 2px 0 0 0;
+  padding: 0;
+  font-size: 14px;
+  color: #000;
+  font-family: "Lucida Grande", arial, sans-serif;
+  background-color: #fff;
+  background-color: rgba(255,255,255,0.95);
+  z-index: 2;
 }
 
 li.result, li.no-results{
