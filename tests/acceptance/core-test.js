@@ -57,7 +57,7 @@ test("Search results should be filtered", function(assert){
   assert.expect(4);
 
   visit('/').then(function(){
-    assert.equal(get(controller, 'content.length'), 3, "precon - 3 possible selections exist");
+    assert.equal(get(controller, 'content.length'), 4, "precon - 4 possible selections exist");
 
     assert.equal($('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   });
@@ -114,7 +114,7 @@ test("A selection can be removed", function(assert){
   andThen(function(){
     var el = find('.selections li.selection');
 
-    assert.equal(3, get(controller, 'model.length'), "precon - the controller has 3 elements.");
+    assert.equal(4, get(controller, 'model.length'), "precon - the controller has 4 elements.");
 
     assert.equal(el.length, 1, "precon - 1 selection element has been added");
     var close = find('.as-close');

@@ -30,7 +30,6 @@ export default Ember.Component.extend({
     },
 
     removeFocus: function() {
-      console.log('removeFocus');
       setTimeout(this.hideResults, 200);
     }
   },
