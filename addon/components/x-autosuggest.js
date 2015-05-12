@@ -91,7 +91,6 @@ export default Ember.Component.extend({
     var query = get(this, 'query');
 
     if(query && query.length > get(this, 'minChars')){
-      this.positionResults();
       return true;
     }
 
@@ -133,8 +132,6 @@ export default Ember.Component.extend({
       return displayResults.clear();
     }
 
-    this.positionResults();
-
     var searchPath = get(this, 'searchPath');
 
     displayResults.clear();
@@ -172,10 +169,6 @@ export default Ember.Component.extend({
     }
 
     this.$('ul.suggestions li').removeClass('hover');
-  },
-
-  positionResults: function(){
-    this.$('.results').removeClass('hdn');
   },
 
   moveSelection: function(direction){
