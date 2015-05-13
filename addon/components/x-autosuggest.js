@@ -40,32 +40,39 @@ export default Ember.Component.extend({
   query: null,
   selectionIndex: -1,
 
-  _autoSuggestInitialize: Ember.on('init', function() {
+  _initialize: Ember.on('init', function() {
     this._super.apply(this, arguments);
     set(this, 'displayResults', Ember.A());
+
+    this.keyFunctionMap = {};
+
+    this.keyFunctionMap[KEY_UP] = this.moveSelection.bind(this, "up");
+    this.keyFunctionMap[KEY_DOWN] = this.moveSelection.bind(this, "down");
+    this.keyFunctionMap[ENTER] = this.selectActive;
+    this.keyFunctionMap[ESCAPE] = this.hideResults;
   }),
 
-  _autoSuggestSetup: Ember.on('didInsertElement', function() {
+  _setup: Ember.on('didInsertElement', function() {
     this._super.apply(this, arguments);
 
     Ember.assert('You must supply a source for the autosuggest component', get(this, 'source'));
     Ember.assert('You must supply a destination for the autosuggest component', get(this, 'destination'));
 
-    var suggestions = document.querySelector("ul.suggestions");
+    let suggestions = document.querySelector("ul.suggestions");
 
     suggestions.addEventListener("mouseover", this.mouseOver.bind(this));
     suggestions.addEventListener("mouseout", this.mouseOut.bind(this));
   }),
 
-  _autoSuggestTeardown: Ember.on('willDestroyElement', function() {
-    var suggestions = document.querySelector("ul.suggestions");
+  _teardown: Ember.on('willDestroyElement', function() {
+    let suggestions = document.querySelector("ul.suggestions");
 
     suggestions.removeEventListener("mouseover", this.mouseOver);
     suggestions.removeEventListener("mouseout", this.mouseOver);
   }),
 
   _queryPromise: function(query){
-    var source = get(this, 'source'),
+    let source = get(this, 'source'),
         searchPath = get(this, 'searchPath'),
         store = this.container.lookup('store:main');
 
@@ -73,7 +80,7 @@ export default Ember.Component.extend({
       if(('undefined' !== typeof DS) && (DS.Model.detect(source))){
         Ember.assert('You have specifid the source as a DS.Model but no store is in the container', store);
 
-        var queryExpression = {};
+        let queryExpression = {};
 
         queryExpression[searchPath] = query;
 
@@ -88,7 +95,7 @@ export default Ember.Component.extend({
   },
 
   hasQuery: Ember.computed('query', function(){
-    var query = get(this, 'query');
+    let query = get(this, 'query');
 
     if(query && query.length > get(this, 'minChars')){
       return true;
@@ -98,7 +105,7 @@ export default Ember.Component.extend({
   }),
 
   input: function(e) {
-    var query = e.target.value || '',
+    let query = e.target.value || '',
         displayResults = get(this, 'displayResults'),
         minChars = get(this, 'minChars'),
         self = this;
@@ -119,20 +126,19 @@ export default Ember.Component.extend({
   },
 
   processResults: function(query, source){
-    var self = this,
-        displayResults = get(this, 'displayResults');
+    let displayResults = get(this, 'displayResults'),
+        searchPath = get(this, 'searchPath'),
+        destination = get(this, 'destination');
 
-    var results = source.filter(function(item){
-      return item.get(get(self, 'searchPath')).toLowerCase().search(query.toLowerCase()) !== -1;
-    }).filter(function(item){
-      return !get(self, 'destination').contains(item);
+    let results = source.filter((item) => {
+      return item.get(searchPath).toLowerCase().search(query.toLowerCase()) !== -1;
+    }).filter((item) => {
+      return !destination.contains(item);
     });
 
-    if(get(results, 'length') === 0){
+    if(!results.length) {
       return displayResults.clear();
     }
-
-    var searchPath = get(this, 'searchPath');
 
     displayResults.clear();
 
@@ -142,9 +148,10 @@ export default Ember.Component.extend({
   },
 
   mouseOver: function(evt){
-    var el = this.$(evt.target);
+    let el = this.$(evt.target),
+        displayResults = get(this, 'displayResults');
 
-    var active = get(this, 'displayResults').filter(function(item){
+    let active = displayResults.filter((item) => {
       return get(item, 'active');
     });
 
@@ -162,7 +169,7 @@ export default Ember.Component.extend({
   },
 
   mouseOut: function(evt){
-    var target = $(evt.target);
+    let target = $(evt.target);
 
     if(target.parents('ul').hasClass('suggestions')){
       return;
@@ -172,7 +179,7 @@ export default Ember.Component.extend({
   },
 
   moveSelection: function(direction){
-    var selectionIndex = get(this, 'selectionIndex'),
+    let selectionIndex = get(this, 'selectionIndex'),
         isUp = direction === 'up',
         isDown = !isUp,
         displayResults = get(this, 'displayResults'),
@@ -190,10 +197,11 @@ export default Ember.Component.extend({
     hoverEl = this.$('li.result.hover');
 
     if(hoverEl.length){
-      var text = Ember.$('span', hoverEl).text(),
-          selected = displayResults.find(function(item){
-            return get(item, searchPath) === text;
-          });
+      let text = Ember.$('span', hoverEl).text();
+
+      let selected = displayResults.find((item) => {
+        return get(item, searchPath) === text;
+      });
 
       selectionIndex = displayResults.indexOf(selected);
 
@@ -213,7 +221,7 @@ export default Ember.Component.extend({
       selectionIndex--;
     }
 
-    var active = get(this, 'displayResults').objectAt(selectionIndex);
+    let active = get(this, 'displayResults').objectAt(selectionIndex);
 
     set(this, 'selectionIndex', selectionIndex);
 
@@ -221,7 +229,7 @@ export default Ember.Component.extend({
   },
 
   hideResults: function(){
-    var displayResults = get(this, 'displayResults');
+    let displayResults = get(this, 'displayResults');
 
     set(this, 'selectionIndex', -1);
 
@@ -233,13 +241,13 @@ export default Ember.Component.extend({
   },
 
   selectActive: function(){
-    var displayResultsLength = get(this, 'displayResults.length');
+    let displayResultsLength = get(this, 'displayResults.length');
 
     if(!displayResultsLength){
       return;
     }
 
-    var active = get(this, 'displayResults').find(function(item){
+    let active = get(this, 'displayResults').find(function(item){
       return get(item, 'active');
     });
 
@@ -251,25 +259,14 @@ export default Ember.Component.extend({
     this.send('addSelection', active);
   },
 
-  keyFunctionMap: Ember.computed(function() {
-    var keyFunctionMap = {};
-
-    keyFunctionMap[KEY_UP] = this.moveSelection.bind(this, "up");
-    keyFunctionMap[KEY_DOWN] = this.moveSelection.bind(this, "down");
-    keyFunctionMap[ENTER] = this.selectActive;
-    keyFunctionMap[ESCAPE] = this.hideResults;
-
-    return keyFunctionMap;
-  }),
-
   keyDown: function(e){
-    var keyCode = e.keyCode;
+    let keyCode = e.keyCode;
 
     if(!ALLOWED_KEY_CODES.contains(keyCode)){
       return;
     }
 
-    get(this, 'keyFunctionMap')[keyCode].call(this);
+    this.keyFunctionMap[keyCode].call(this);
 
     e.preventDefault();
     e.stopPropagation();
