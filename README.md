@@ -52,7 +52,7 @@ export default Ember.Controller.extend({
 });
 
 ```
-Then setting the type as the source of the ```x-autosuggest``` component.
+Then set the type as the source of the ```x-autosuggest``` component.
 ```
 {{x-autosuggest source=Employee destination=chosenEmployees searchPath="fullName" minChars=0}}
 ```
@@ -88,7 +88,7 @@ If you are using
 ```javascript
 "devDependencies": {
   ...
-  "emberx-autosuggest": "~ 0.0.1"
+  "emberx-autosuggest": "~ 0.2.1"
 }
 ```
 

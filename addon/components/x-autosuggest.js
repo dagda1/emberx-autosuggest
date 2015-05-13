@@ -58,17 +58,17 @@ export default Ember.Component.extend({
     Ember.assert('You must supply a source for the autosuggest component', get(this, 'source'));
     Ember.assert('You must supply a destination for the autosuggest component', get(this, 'destination'));
 
-    let suggestions = document.querySelector("ul.suggestions");
+    let suggestions = this.$("ul.suggestions");
 
-    suggestions.addEventListener("mouseover", this.mouseOver.bind(this));
-    suggestions.addEventListener("mouseout", this.mouseOut.bind(this));
+    suggestions.on("mouseover", this.mouseOver.bind(this));
+    suggestions.on("mouseout", this.mouseOut.bind(this));
   }),
 
   _teardown: Ember.on('willDestroyElement', function() {
-    let suggestions = document.querySelector("ul.suggestions");
+    let suggestions = this.$("ul.suggestions");
 
-    suggestions.removeEventListener("mouseover", this.mouseOver);
-    suggestions.removeEventListener("mouseout", this.mouseOver);
+    suggestions.off("mouseover", this.mouseOver);
+    suggestions.off("mouseout", this.mouseOver);
   }),
 
   _queryPromise: function(query){
@@ -247,7 +247,7 @@ export default Ember.Component.extend({
       return;
     }
 
-    let active = get(this, 'displayResults').find(function(item){
+    let active = get(this, 'displayResults').find((item) => {
       return get(item, 'active');
     });
 
