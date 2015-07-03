@@ -36,11 +36,11 @@ test("Search results should be filtered and visible", function(assert){
   fillInWithInputEvents('input.autosuggest', 'Carol', 'input');
 
   andThen(function(){
-                                                                               assert.ok(Ember.$('ul.suggestions').is(':visible'), "results ul is displayed.");
-                                                                               var el = find('.results .suggestions li.result span');
-                                                                               assert.equal(el.length, 1, "1 search result exists");
-                                                                               assert.equal(el.text().trim(), "Carol Bazooka", "1 search result is visible.");
-                                                                               });
+    assert.ok(Ember.$('ul.suggestions').is(':visible'), "results ul is displayed.");
+    var el = find('.results .suggestions li.result span');
+    assert.equal(el.length, 1, "1 search result exists");
+    assert.equal(el.text().trim(), "Carol Bazooka", "1 search result is visible.");
+  });
 });
 
 test("A chosen selection is added to the destination", function(assert){
