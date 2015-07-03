@@ -11,9 +11,15 @@ export default function startApp(attrs) {
   var attributes = Ember.merge({}, config.APP);
   attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;
 
+  var TestFixtureAdapter = FixtureAdapter.extend({
+    shouldReloadAll: function(store, snapshotRecordArray) {
+      return true;
+    }
+  });
+
   Ember.run(function() {
     application = Application.create(attributes);
-    application.register('adapter:application', FixtureAdapter);
+    application.register('adapter:application', TestFixtureAdapter);
     application.setupForTesting();
     application.injectTestHelpers();
   });
