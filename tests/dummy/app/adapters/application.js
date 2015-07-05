@@ -1,10 +1,8 @@
 import DS from "ember-data";
-
-var FixtureAdapter = DS.FixtureAdapter.extend({
-  simulateRemoteResponse: true
-});
+import FixtureAdapter from 'ember-data-fixture-adapter';
 
 FixtureAdapter.reopen({
+  simulateRemoteResponse: true,
   queryFixtures: function(fixtures, query){
     return fixtures.filter(function(employee){
       var fullName =  employee.firstName + " " + employee.surname;
