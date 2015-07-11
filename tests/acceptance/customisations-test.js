@@ -25,20 +25,20 @@ module('Acceptance: Customisations', {
   }
 });
 
-// test("Can prepend a customisation in each suggestion", function(assert){
-//   visit('/customisations').then(function(){
-//     assert.equal(get(controller, 'content.length'), 3, "precon - 3 possible selections exist");
+test("Can prepend a customisation in each suggestion", function(assert){
+  visit('/customisations').then(function(){
+    assert.equal(get(controller, 'content.length'), 3, "precon - 3 possible selections exist");
 
-//     assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
-//   })
-//     .fillInWithInputEvents('input.autosuggest', 'Paul',['keydown', 'input']  ).then(function(){
-//       var el = find('.results .suggestions li.result span');
-//       assert.equal(el.length, 1, "1 search result exists");
+    assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
+  })
+    .fillInWithInputEvents('input.autosuggest', 'Paul',['keydown', 'input']  ).then(function(){
+      var el = find('.results .suggestions li.result span');
+      assert.equal(el.length, 1, "1 search result exists");
 
-//       var img = el.find('img.avatar');
-//       assert.equal('Paul Cowan', img.attr('alt'));
-//     });
-// });
+      var img = el.find('img.avatar');
+      assert.equal('Paul Cowan', img.attr('alt'));
+    });
+});
 
 // test("Can prepend a customisation to each chosen selection", function(assert){
 //   visit('/customisations').then(function(){
