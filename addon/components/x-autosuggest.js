@@ -104,27 +104,6 @@ export default Ember.Component.extend({
     return false;
   }),
 
-  input: function(e) {
-    let query = e.target.value || '',
-        displayResults = get(this, 'displayResults'),
-        minChars = get(this, 'minChars'),
-        self = this;
-
-    set(this, 'query', query);
-
-    if(!query.length || query < minChars) {
-      set(this, 'selectionIndex', -1);
-      displayResults.clear();
-      return;
-    }
-
-    this._queryPromise(query).then(function(results){
-      self.processResults(query, results);
-    }).catch(function(error) {
-      Ember.Logger.error(error);
-    });
-  },
-
   processResults: function(query, source){
     let displayResults = get(this, 'displayResults'),
         searchPath = get(this, 'searchPath'),
@@ -258,6 +237,28 @@ export default Ember.Component.extend({
 
     this.send('addSelection', active);
   },
+
+  input: function(e) {
+    let query = e.target.value || '',
+        displayResults = get(this, 'displayResults'),
+        minChars = get(this, 'minChars'),
+        self = this;
+
+    set(this, 'query', query);
+
+    if(!query.length || query < minChars) {
+      set(this, 'selectionIndex', -1);
+      displayResults.clear();
+      return;
+    }
+
+    this._queryPromise(query).then(function(results){
+      self.processResults(query, results);
+    }).catch(function(error) {
+      Ember.Logger.error(error);
+    });
+  },
+
 
   keyDown: function(e){
     let keyCode = e.keyCode;
