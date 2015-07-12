@@ -45,7 +45,7 @@ test("a no results message is displayed when no match is found", function(assert
     assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   }).keyEvent('.autosuggest', 'keypress', 88);
 
-  fillInWithInputEvents('input.autosuggest', 'xxxx', 'input');
+  fillInWithInputEvent('input.autosuggest', 'xxxx', 'input');
 
   andThen(function(){
     assert.ok(Ember.$('ul.suggestions').is(':visible'), "results ul is displayed.");
@@ -62,7 +62,7 @@ test("Search results should be filtered", function(assert){
     assert.equal($('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   });
 
-  fillInWithInputEvents('input[type=text].autosuggest', "Paul", 'input');
+  fillInWithInputEvent('input[type=text].autosuggest', "Paul", 'input');
 
   andThen(function(){
     var el = find('.results .suggestions li.result span');
@@ -78,7 +78,7 @@ test("A selection can be added", function(assert) {
 
   visit('/');
 
-  fillInWithInputEvents('input.autosuggest', 'Paul', 'input');
+  fillInWithInputEvent('input.autosuggest', 'Paul', 'input');
 
   click('.results .suggestions li.result');
 
@@ -108,7 +108,7 @@ test("A selection can be removed", function(assert){
 
   visit('/');
 
-  fillInWithInputEvents('input.autosuggest', 'Paul', 'input')
+  fillInWithInputEvent('input.autosuggest', 'Paul', 'input')
   .click('.results .suggestions li.result');
 
   andThen(function(){
@@ -130,7 +130,7 @@ test("A selection can be removed", function(assert){
 
 test("key down and key up change the active elemnt", function(assert){
   visit('/')
-    .fillInWithInputEvents('input.autosuggest', 'a', 'input')
+    .fillInWithInputEvent('input.autosuggest', 'a', 'input')
     .keyEvent('.autosuggest', 'keydown', 40).then(function(){
       var active = find('.results li.result.active');
 
@@ -151,7 +151,7 @@ test("key down and key up change the active elemnt", function(assert){
 
 test("pressing enter on a selected item adds the selection to the destination", function(assert){
   visit('/')
-    .fillInWithInputEvents('input.autosuggest', 'Michael', 'input')
+    .fillInWithInputEvent('input.autosuggest', 'Michael', 'input')
     .keyEvent('input.autosuggest', 'keydown', 40).then(function(){
       var active = find('.results li.result.active');
 
