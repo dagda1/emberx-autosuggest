@@ -10,10 +10,10 @@
     <input type="text" {{action "removeFocus" on="focus-out"}} class="autosuggest"/>
   </li>
 </ul>
-<div {{bind-attr class=':results hasQuery::hdn'}}>
+<div class="results {{unless hasQuery 'hdn'}}">
   <ul class='suggestions'>
     {{#each displayResults key="@index" as |result|}}
-      <li {{action "addSelection" result}} {{bind-attr class=":result result.active"}}>
+      <li {{action "addSelection" result}} class="result {{if result.active 'active'}}">
         <span class="result-name">
           {{yield result}}
           {{display-helper result searchPath}}

@@ -42,23 +42,12 @@ while hitting escape hides the autocomplete menu.
 
 ### Query an Ember-Data model
 Generate ember-data type ```findQuery``` queries on the remote server by getting a reference to the type.
-```
-// controller
-import Employee from '../models/employee';
 
-export default Ember.Controller.extend({
-  chosenEmployees: Ember.A(),
-  Employee: Employee
-});
-
-```
-Then set the type as the source of the ```x-autosuggest``` component.
-```
 {{x-autosuggest source=Employee destination=chosenEmployees searchPath="fullName" minChars=0}}
 ```
-This will call findQuery with an expression created from the **searchPath**.  In the above example, that would be:
+This will call findQuery on an ```Employee``` model with an expression created from the **searchPath**.  In the above example, that would be:
 ```
-store.find(Employee, {fullName: '<query>'});
+store.find("employee", {fullName: '<query>'});
 ```
 ### View the demo
 ```

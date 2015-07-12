@@ -24,20 +24,16 @@ function focus(el) {
   }
 }
 
-function fillInWithInputEvents(app, selector, contextOrText, textOrEvents, events) {
+function fillInWithInputEvent(app, selector, contextOrText, textOrEvents, event) {
   var $el, context, text;
 
-  if (typeof events === 'undefined') {
+  if (typeof event === 'undefined') {
     context = null;
     text = contextOrText;
-    events = textOrEvents;
+    event = textOrEvents;
   } else {
     context = contextOrText;
     text = textOrEvents;
-  }
-
-  if (typeof events === 'string') {
-    events = [events];
   }
 
   $el = app.testHelpers.findWithAssert(selector, context);
@@ -46,7 +42,7 @@ function fillInWithInputEvents(app, selector, contextOrText, textOrEvents, event
 
   focus($el);
 
-  function fillInWithInputEvent(character) {
+  function fillInWithEvent(character) {
     var val = $el.val();
     var charCode = character.charCodeAt(0);
 
@@ -56,18 +52,16 @@ function fillInWithInputEvents(app, selector, contextOrText, textOrEvents, event
       $el.val(val).change();
     });
 
-    for (var i = 0, l = events.length; i < l; i++) {
-      run($el, "trigger", events[i], { keyCode: charCode, which: charCode });
-    }
+    run($el, "trigger", event, { keyCode: charCode, which: charCode });
   }
 
   for (var i = 0, l = text.length; i < l; i++) {
-    fillInWithInputEvent(text[i]);
+    fillInWithEvent(text[i]);
   }
 
   return app.testHelpers.wait();
 }
 
-Ember.Test.registerAsyncHelper('fillInWithInputEvents', fillInWithInputEvents);
+Ember.Test.registerAsyncHelper('fillInWithInputEvent', fillInWithInputEvent);
 
 setResolver(resolver);

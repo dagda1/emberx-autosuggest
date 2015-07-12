@@ -31,7 +31,7 @@ test("Can prepend a customisation in each suggestion", function(assert){
 
     assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   })
-    .fillInWithInputEvents('input.autosuggest', 'Paul',['input']  ).then(function(){
+    .fillInWithInputEvent('input.autosuggest', 'Paul', 'input').then(function(){
       var el = find('.results .suggestions li.result span');
       assert.equal(el.length, 1, "1 search result exists");
 
@@ -46,7 +46,7 @@ test("Can prepend a customisation to each chosen selection", function(assert){
 
     assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   })
-    .fillInWithInputEvents('input.autosuggest', 'Paul', ['input'])
+    .fillInWithInputEvent('input.autosuggest', 'Paul', 'input')
     .click('.results .suggestions li.result').then(function(){
       var el = find('.selections li.selection');
 

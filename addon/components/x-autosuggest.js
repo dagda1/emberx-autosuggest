@@ -74,11 +74,11 @@ export default Ember.Component.extend({
   _queryPromise: function(query){
     let source = get(this, 'source'),
         searchPath = get(this, 'searchPath'),
-        store = this.container.lookup('store:service');
+        store = this.container.lookup('store:main');
 
     return new Ember.RSVP.Promise(function(resolve, reject){
-      if(('undefined' !== typeof DS) && (DS.Model.detect(source))){
-        Ember.assert('You have specifid the source as a DS.Model but no store is in the container', store);
+      if(typeof source === "string"){
+        Ember.assert('You have specified the source as a DS.Model but no store is in the container', store);
 
         let queryExpression = {};
 

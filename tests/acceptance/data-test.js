@@ -49,9 +49,9 @@ module('XAutosuggest - Ember Data source tests', {
     }];
 
     let server = new Pretender(function(){
-      // this.get('/employees', function(request) {
-      //   return Ember.A(employees);
-      // });
+      this.get('/employees', function(request) {
+        return [200,  {"Content-Type": "application/json"}, JSON.stringify({employees: employees})];
+      });
 
       this.get('/employees/:name', function(request){
         let query = request.params.name || '';
@@ -60,10 +60,12 @@ module('XAutosuggest - Ember Data source tests', {
           return [];
         }
 
-        return Ember.A(employees).filter(function(employee){
+        let results = Ember.A(employees).filter(function(employee){
           var fullName =  employee.firstName + " " + employee.surname;
           return fullName.toLowerCase().search(query.toLowerCase()) !== -1;
         });
+
+        return [200, {"Content-Type": "application/json"}, JSON.stringify({employees: JSON.stringify({employees: results})})];
       });
     });
   },
@@ -85,7 +87,7 @@ test("Search results should be filtered and visible", function(assert){
     assert.equal(Ember.$('ul.suggestions').is(':visible'), false, "precon - results ul is initially not displayed");
   });
 
-  fillInWithInputEvents('input.autosuggest', 'Carol', 'input');
+  fillInWithInputEvent('input.autosuggest', 'Carol', 'input');
 
   andThen(function(){
     assert.ok(Ember.$('ul.suggestions').is(':visible'), "results ul is displayed.");
@@ -98,7 +100,7 @@ test("Search results should be filtered and visible", function(assert){
 test("A chosen selection is added to the destination", function(assert){
   visit('/data');
 
-  fillInWithInputEvents('input.autosuggest', 'Carol', 'input')
+  fillInWithInputEvent('input.autosuggest', 'Carol', 'input')
     .click('.results .suggestions li.result');
 
     andThen(function(){
